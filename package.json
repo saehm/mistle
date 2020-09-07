@@ -18,9 +18,9 @@
   "bugs": {
     "url": "https://github.com/saehm/dataset/issues"
   },
-  "main": "dist/dataset.js",
-  "unpkg": "dist/dataset.js",
-  "jsdelivr": "dist/dataset.js",
+  "main": "dist/dataset.min.js",
+  "unpkg": "dist/dataset.min.js",
+  "jsdelivr": "dist/dataset.min.js",
   "devDependencies": {
     "@rollup/plugin-json": "^4.1.0",
     "rollup": "^2.26.10",
