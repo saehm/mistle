@@ -1,8 +1,7 @@
 {
-  "name": "datasets",
+  "name": "@saehrimnir/dataset",
   "version": "0.0.0",
   "description": "A JavaScript Library for serving often used datasets.",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,10 +9,21 @@
     "type": "git",
     "url": "git+https://github.com/saehm/dataset.git"
   },
-  "author": "Rene Cutura",
-  "license": "ISC",
+  "author": {
+    "name": "Rene Cutura",
+    "url": "http://renecutura.eu"
+  },
+  "homepage": "https://renecutura.eu",
+  "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/saehm/dataset/issues"
   },
-  "homepage": "https://github.com/saehm/dataset#readme"
+  "main": "dist/dataset.js",
+  "unpkg": "dist/dataset.js",
+  "jsdelivr": "dist/dataset.js",
+  "devDependencies": {
+    "@rollup/plugin-json": "^4.1.0",
+    "rollup": "^2.26.10",
+    "rollup-plugin-terser": "^7.0.2"
+  }
 }
