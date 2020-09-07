@@ -1,7 +1,13 @@
 {
   "name": "@saehrimnir/dataset",
   "version": "0.0.0",
-  "keywords": ["dataset", "iris", "mnist", "fmnist", "swissroll"],
+  "keywords": [
+    "dataset",
+    "iris",
+    "mnist",
+    "fmnist",
+    "swissroll"
+  ],
   "description": "A JavaScript Library for serving often used datasets.",
   "repository": {
     "type": "git",
