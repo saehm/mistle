@@ -26,6 +26,6 @@ export default [{
         name: "datasets"
     },
     plugins: [
-        json(), terser({format: {preamble: copyright}})
+        json({compact: true}), terser({format: {preamble: copyright}})
     ]
 }]
