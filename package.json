@@ -1,0 +1,19 @@
+{
+  "name": "datasets",
+  "version": "0.0.0",
+  "description": "A JavaScript Library for serving often used datasets.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saehm/dataset.git"
+  },
+  "author": "Rene Cutura",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saehm/dataset/issues"
+  },
+  "homepage": "https://github.com/saehm/dataset#readme"
+}
