@@ -1,9 +1,12 @@
-export * as FMNIST from "./dataset/fmnist.json";
 export * as IRIS from "./dataset/iris.json";
-export * as MNIST from "./dataset/mnist.json";
 export * as OECD from "./dataset/oecd.json";
 export * as SPOTIFY from "./dataset/spotify.json";
-export * as SSHAPE from "./dataset/sshape.json";
-export * as SWISSROLL from "./dataset/swissroll.json";
-export * as WAVES from "./dataset/waves.json";
 
+export { default as waves, WAVES } from "./src/waves.js";
+export { default as swissroll, SWISSROLL } from "./src/swissroll.js";
+export { default as sshape, SSHAPE } from "./src/sshape.js";
+export { default as rays, RAYS } from "./src/rays.js";
+export { default as moons, MOONS } from "./src/moons.js";
+
+export { default as fetch_mnist } from "./src/mnist.js";
+export { default as fetch_fmnist } from "./src/fmnist.js";

@@ -1,15 +1,6 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-var druidjs = require('@saehrimnir/druidjs');
-var fetch = require('cross-fetch');
-var pako = require('pako');
-
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var fetch__default = /*#__PURE__*/_interopDefaultLegacy(fetch);
-var pako__default = /*#__PURE__*/_interopDefaultLegacy(pako);
+import { Randomizer } from '@saehrimnir/druidjs';
+import fetch from 'cross-fetch';
+import pako from 'pako';
 
 var names$2 = [
 	"Iris-setosa",
@@ -6189,7 +6180,7 @@ function getStatistics({values, columns}) {
  * @returns {{values: Array<Array>, labels: Array<String>, columns: Array<String>, statistics: Object}} - The final waves dataset.
  */
 function waves({N = 400, freq_x = 1, freq_y = 1, amplitude = 2, noise = 0, seed = 4711} = {}) {
-    const R = new druidjs.Randomizer(seed);
+    const R = new Randomizer(seed);
     const a = Math.ceil(Math.sqrt(N));
     let values = [];
     const labels = [];
@@ -6225,7 +6216,7 @@ const WAVES = waves();
  * @returns {{values: Array<Array>, labels: Array<String>, columns: Array<String>, statistics: Object}} - The final swissroll dataset.
  */
 function swissroll({N = 400, alpha_start = 1, alpha_end = 2.5, noise = 0, width = 20, seed = 4711, num_labels = 8} = {}) {
-    const R = new druidjs.Randomizer(seed);
+    const R = new Randomizer(seed);
     let values = new Array(N);
     const labels = new Array(N);
     const columns = ["X", "Y", "Z"];
@@ -6259,7 +6250,7 @@ const SWISSROLL = swissroll();
  * @returns {{values: Array<Array>, labels: Array<String>, columns: Array<String>, statistics: Object}} - The final s-shape dataset.
  */
 function sshape({N = 400, noise = 0, width = 20, seed = 4711, num_labels = 8} = {}) {
-    const R = new druidjs.Randomizer(seed);
+    const R = new Randomizer(seed);
     let values = new Array(N);
     const labels = new Array(N);
     const columns = ["X", "Y", "Z"];
@@ -6294,7 +6285,7 @@ const SSHAPE = sshape();
  * @returns {{values: Array<Array>, labels: Array<String>, columns: Array<String>, statistics: Object}} - The final rays dataset.
  */
 function rays({N = 400, D = 7, noise = 0, touching = true, length = 12, seed = 4711} = {}) {
-    const R = new druidjs.Randomizer(seed);
+    const R = new Randomizer(seed);
     const n = Math.round(N / D) * D;
     let values = [];
     const labels = [];
@@ -6328,7 +6319,7 @@ const RAYS = rays();
  * @returns {{values: Array<Array>, labels: Array<String>, columns: Array<String>, statistics: Object}} - The final moons dataset.
  */
 function moons({N = 400, noise = 0, open=0.5, seed = 4711} = {}) {
-    const R = new druidjs.Randomizer(seed);
+    const R = new Randomizer(seed);
     const N_alpha = Math.floor(N / 2);
     const N_beta = N - N_alpha;
 
@@ -6378,7 +6369,7 @@ const MNIST_TEST_LABELS_URL = "https://storage.googleapis.com/cvdf-datasets/mnis
  * @returns {{values: Array<Array>, labels: Array<String>, columns: Array<String>, statistics: Object}} - The final MNIST dataset sample.
  */
 async function mnist({N = 400, seed = 4711, digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], big = false} = {}) {
-    const R = new druidjs.Randomizer(seed);
+    const R = new Randomizer(seed);
     const raw_values = await fetch_data$1(big ? MNIST_TRAIN_VALUES_URL : MNIST_TEST_VALUES_URL);
     const raw_labels = await fetch_data$1(big ? MNIST_TRAIN_LABELS_URL : MNIST_TEST_LABELS_URL);
 
@@ -6410,9 +6401,9 @@ async function mnist({N = 400, seed = 4711, digits = [0, 1, 2, 3, 4, 5, 6, 7, 8,
 }
 
 async function fetch_data$1(URL) {
-    const response = await fetch__default["default"](URL, { credentials: "include", cache: "force-cache" });
+    const response = await fetch(URL, { credentials: "include", cache: "force-cache" });
     let data = await response.arrayBuffer();
-    data = pako__default["default"].inflate(data);
+    data = pako.inflate(data);
     return data;
 }
 
@@ -6443,7 +6434,7 @@ const FMNIST_LABELS_DICT = {
  * @returns {{values: Array<Array>, labels: Array<String>, columns: Array<String>, statistics: Object}} - The final FMNIST dataset sample.
  */
 async function fmnist({N = 400, seed = 4711, items = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], big = false} = {}) {
-    const R = new druidjs.Randomizer(seed);
+    const R = new Randomizer(seed);
     const raw_values = await fetch_data(big ? FMNIST_TRAIN_VALUES_URL : FMNIST_TEST_VALUES_URL);
     const raw_labels = await fetch_data(big ? FMNIST_TRAIN_LABELS_URL : FMNIST_TEST_LABELS_URL);
 
@@ -6474,24 +6465,10 @@ async function fmnist({N = 400, seed = 4711, items = [0, 1, 2, 3, 4, 5, 6, 7, 8,
 }
 
 async function fetch_data(URL) {
-    const response = await fetch__default["default"](URL, { credentials: "include", cache: "force-cache" });
+    const response = await fetch(URL, { credentials: "include", cache: "force-cache" });
     let data = await response.arrayBuffer();
-    data = pako__default["default"].inflate(data);
+    data = pako.inflate(data);
     return data;
 }
 
-exports.IRIS = iris$1;
-exports.MOONS = MOONS;
-exports.OECD = oecd$1;
-exports.RAYS = RAYS;
-exports.SPOTIFY = spotify$1;
-exports.SSHAPE = SSHAPE;
-exports.SWISSROLL = SWISSROLL;
-exports.WAVES = WAVES;
-exports.fetch_fmnist = fmnist;
-exports.fetch_mnist = mnist;
-exports.moons = moons;
-exports.rays = rays;
-exports.sshape = sshape;
-exports.swissroll = swissroll;
-exports.waves = waves;
+export { iris$1 as IRIS, MOONS, oecd$1 as OECD, RAYS, spotify$1 as SPOTIFY, SSHAPE, SWISSROLL, WAVES, fmnist as fetch_fmnist, mnist as fetch_mnist, moons, rays, sshape, swissroll, waves };

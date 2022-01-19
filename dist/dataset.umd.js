@@ -1,10 +1,8 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-var druidjs = require('@saehrimnir/druidjs');
-var fetch = require('cross-fetch');
-var pako = require('pako');
+(function (global, factory) {
+typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@saehrimnir/druidjs'), require('cross-fetch'), require('pako')) :
+typeof define === 'function' && define.amd ? define(['exports', '@saehrimnir/druidjs', 'cross-fetch', 'pako'], factory) :
+(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.datasets = global.datasets || {}, global.druidjs, global.fetch, global.pako));
+})(this, (function (exports, druidjs, fetch, pako) { 'use strict';
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -1274,13 +1272,13 @@ var iris = {
 };
 
 var iris$1 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    names: names$2,
-    labels: labels$2,
-    columns: columns$2,
-    values: values$2,
-    statistics: statistics$2,
-    'default': iris
+__proto__: null,
+names: names$2,
+labels: labels$2,
+columns: columns$2,
+values: values$2,
+statistics: statistics$2,
+'default': iris
 });
 
 var names$1 = [
@@ -2630,13 +2628,13 @@ var oecd = {
 };
 
 var oecd$1 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    names: names$1,
-    labels: labels$1,
-    columns: columns$1,
-    values: values$1,
-    statistics: statistics$1,
-    'default': oecd
+__proto__: null,
+names: names$1,
+labels: labels$1,
+columns: columns$1,
+values: values$1,
+statistics: statistics$1,
+'default': oecd
 });
 
 var names = [
@@ -6123,13 +6121,13 @@ var spotify = {
 };
 
 var spotify$1 = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    names: names,
-    labels: labels,
-    columns: columns,
-    values: values,
-    statistics: statistics,
-    'default': spotify
+__proto__: null,
+names: names,
+labels: labels,
+columns: columns,
+values: values,
+statistics: statistics,
+'default': spotify
 });
 
 const TAU = Math.PI * 2;
@@ -6495,3 +6493,7 @@ exports.rays = rays;
 exports.sshape = sshape;
 exports.swissroll = swissroll;
 exports.waves = waves;
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+}));
