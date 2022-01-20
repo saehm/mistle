@@ -10,8 +10,8 @@ const copyright = `// ${meta.homepage} v${meta.version} Copyright ${(new Date).g
 export default [{
     input: "index.js",
     output: [
-        {file: "dist/dataset.js", format: "cjs"},
-        {file: "dist/dataset.es.js", format: "es"}
+        {file: "dist/dataset.js", format: "cjs", sourcemap: true},
+        {file: "dist/dataset.es.js", format: "es", sourcemap: true}
     ],
     plugins: [
         json({compact: true}),
@@ -24,13 +24,18 @@ export default [{
         file: "dist/dataset.umd.js",
         format: "umd",
         indent: false,
-        name: "datasets"
+        name: "datasets",
+        sourcemap: true
     },
+    external: ["cross-fetch/polyfill"],
     plugins: [
         json({compact: true}),
         resolve(),
-        commonjs(),
-        nodePolyfills()
+        nodePolyfills({
+            preferBuiltins: true,
+            browser: true,
+        }),
+        commonjs()
     ]
 }, {
     input: "index.js",
@@ -39,13 +44,18 @@ export default [{
         file: "dist/dataset.min.js",
         format: "umd",
         indent: false,
-        name: "datasets"
+        name: "datasets",
+        sourcemap: true
     },
+    external: ["cross-fetch/polyfill"],
     plugins: [
         resolve(),
+        nodePolyfills({
+            preferBuiltins: true,
+            browser: true,
+        }),
         commonjs(),
         json({compact: true}), 
-        terser({format: {preamble: copyright}}),
-        nodePolyfills()
+        terser({format: {preamble: copyright}})
     ]
 }]

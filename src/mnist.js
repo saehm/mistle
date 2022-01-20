@@ -1,7 +1,5 @@
-import fetch from "cross-fetch";
-import pako from "pako";
 import { Randomizer } from "@saehrimnir/druidjs";
-import { getStatistics } from "./utils.js";
+import { getStatistics, fetch_data } from "./utils.js";
 
 const MNIST_TRAIN_VALUES_URL = "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz" // "http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz"
 const MNIST_TRAIN_LABELS_URL = "https://storage.googleapis.com/cvdf-datasets/mnist/train-labels-idx1-ubyte.gz" // "http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz"
@@ -45,13 +43,6 @@ export default async function({N = 400, seed = 4711, digits = [0, 1, 2, 3, 4, 5,
         values.push(data_row);
         labels.push(raw_labels[8 + i]);
     }
-    const columns = Array.from({length: 28 * 28}, (_, i) => `pixel_at_${i % 28}_${Math.floor(i / 28)}}`);
+    const columns = Array.from({length: 28 * 28}, (_, i) => `pixel_at_${i % 28}_${Math.floor(i / 28)}`);
     return {values, labels, columns, statistics: getStatistics({values, labels, columns})};
-}
-
-async function fetch_data(URL) {
-    const response = await fetch(URL, { credentials: "include", cache: "force-cache" })
-    let data = await response.arrayBuffer();
-    data = pako.inflate(data)
-    return data;
 }

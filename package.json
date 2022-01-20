@@ -1,6 +1,6 @@
 {
   "name": "@saehrimnir/dataset",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "keywords": [
     "dataset",
     "iris",
@@ -38,8 +38,8 @@
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.1.0",
-    "@rollup/plugin-node-resolve": "^7.1.3",
     "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^7.1.3",
     "rollup": "^2.64.0",
     "rollup-plugin-polyfill-node": "^0.8.0",
     "rollup-plugin-terser": "^7.0.2",

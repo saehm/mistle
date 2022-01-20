@@ -1,5 +1,5 @@
 const test = require("tape");
-const datasets = require("../dist/dataset.min.js");
+const datasets = require("../dist/dataset.js");
 
 ["swissroll", "waves", "sshape","moons"].forEach(dataset => {
     test(dataset, (t) => {

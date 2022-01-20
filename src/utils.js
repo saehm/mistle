@@ -1,3 +1,6 @@
+import "cross-fetch/polyfill";
+import pako from "pako";
+
 export const TAU = Math.PI * 2;
 
 export function scaleLinear([min, max], [from, to]) {
@@ -41,4 +44,15 @@ export function getStatistics({values, columns}) {
         result[dimension].max = max;
     })
     return result;
+}
+
+
+export async function fetch_data(URL) {
+    const response = await fetch(URL, { cache: "force-cache", mode: "cors" })
+    let data = await response.arrayBuffer();
+    /* const data = await axios.get(URL, {
+        responseType: "arraybuffer",        
+    }) */
+    data = pako.inflate(data)
+    return data;
 }
