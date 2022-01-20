@@ -18,6 +18,7 @@ const FMNIST_LABELS_DICT = {
     9: "Ankle boot"
 }
 
+
 /**
  * Downloads and samples the FMNIST dataset.
  * @param {Object} parameters

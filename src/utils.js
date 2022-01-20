@@ -1,4 +1,4 @@
-import "cross-fetch/polyfill";
+
 import pako from "pako";
 
 export const TAU = Math.PI * 2;
@@ -48,7 +48,20 @@ export function getStatistics({values, columns}) {
 
 
 export async function fetch_data(URL) {
-    const response = await fetch(URL, { cache: "force-cache", mode: "cors" })
+    let fetch;
+    try {
+        if (process && typeof process !== undefined && process.release.name === "node") {
+            fetch = (await import("cross-fetch")).fetch;
+        }
+    } catch {
+        fetch = window.fetch;
+    }
+    const headers = {
+        credential: "include",
+        cache: "force-cache",
+        mode: "cors"
+    };
+    const response = await fetch(URL, headers);
     let data = await response.arrayBuffer();
     /* const data = await axios.get(URL, {
         responseType: "arraybuffer",        

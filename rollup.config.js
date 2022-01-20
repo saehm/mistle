@@ -1,7 +1,8 @@
 import { terser } from "rollup-plugin-terser";
-import nodePolyfills from 'rollup-plugin-polyfill-node';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import nodePolyfills from 'rollup-plugin-node-polyfills';
+import replace from "@rollup/plugin-replace";
 import json from '@rollup/plugin-json';
 import * as meta from "./package.json";
 
@@ -15,7 +16,6 @@ export default [{
     ],
     plugins: [
         json({compact: true}),
-        nodePolyfills(),
     ]
 }, {
     input: "index.js",
@@ -27,14 +27,15 @@ export default [{
         name: "datasets",
         sourcemap: true
     },
-    external: ["cross-fetch/polyfill"],
+    external: ["cross-fetch", "cross-fetch/polyfill"],
     plugins: [
         json({compact: true}),
-        resolve(),
-        nodePolyfills({
-            preferBuiltins: true,
-            browser: true,
+        replace({
+            'import fetch from "cross-fetch";': "",
+            preventAssignment: true
         }),
+        nodePolyfills({browser: true}),
+        resolve(),
         commonjs()
     ]
 }, {
@@ -47,15 +48,16 @@ export default [{
         name: "datasets",
         sourcemap: true
     },
-    external: ["cross-fetch/polyfill"],
+    external: ["cross-fetch", "cross-fetch/polyfill"],
     plugins: [
-        resolve(),
-        nodePolyfills({
-            preferBuiltins: true,
-            browser: true,
-        }),
-        commonjs(),
         json({compact: true}), 
-        terser({format: {preamble: copyright}})
+        replace({
+            'import fetch from "cross-fetch";': '',
+            preventAssignment: true
+        }),
+        nodePolyfills({browser: true}),
+        resolve(),
+        commonjs(),
+        terser({format: {preamble: copyright}}),
     ]
 }]

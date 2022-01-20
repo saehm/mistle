@@ -1,6 +1,6 @@
 (function (global, factory) {
-typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('cross-fetch/polyfill')) :
-typeof define === 'function' && define.amd ? define(['exports', 'cross-fetch/polyfill'], factory) :
+typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+typeof define === 'function' && define.amd ? define(['exports'], factory) :
 (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.datasets = global.datasets || {}));
 })(this, (function (exports) { 'use strict';
 
@@ -7058,7 +7058,20 @@ function getStatistics({values, columns}) {
 
 
 async function fetch_data(URL) {
-    const response = await fetch(URL, { cache: "force-cache", mode: "cors" });
+    let fetch;
+    try {
+        if (process && typeof process !== undefined && process.release.name === "node") {
+            fetch = (await import('cross-fetch')).fetch;
+        }
+    } catch {
+        fetch = window.fetch;
+    }
+    const headers = {
+        credential: "include",
+        cache: "force-cache",
+        mode: "cors"
+    };
+    const response = await fetch(URL, headers);
     let data = await response.arrayBuffer();
     /* const data = await axios.get(URL, {
         responseType: "arraybuffer",        
@@ -7315,6 +7328,7 @@ const FMNIST_LABELS_DICT = {
     8: "Bag",
     9: "Ankle boot"
 };
+
 
 /**
  * Downloads and samples the FMNIST dataset.

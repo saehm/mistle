@@ -3,10 +3,27 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 var druidjs = require('@saehrimnir/druidjs');
-require('cross-fetch/polyfill');
 var pako = require('pako');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+function _interopNamespace(e) {
+    if (e && e.__esModule) return e;
+    var n = Object.create(null);
+    if (e) {
+        Object.keys(e).forEach(function (k) {
+            if (k !== 'default') {
+                var d = Object.getOwnPropertyDescriptor(e, k);
+                Object.defineProperty(n, k, d.get ? d : {
+                    enumerable: true,
+                    get: function () { return e[k]; }
+                });
+            }
+        });
+    }
+    n["default"] = e;
+    return Object.freeze(n);
+}
 
 var pako__default = /*#__PURE__*/_interopDefaultLegacy(pako);
 
@@ -93,7 +110,20 @@ function getStatistics({values, columns}) {
 
 
 async function fetch_data(URL) {
-    const response = await fetch(URL, { cache: "force-cache", mode: "cors" });
+    let fetch;
+    try {
+        if (process && typeof process !== undefined && process.release.name === "node") {
+            fetch = (await Promise.resolve().then(function () { return /*#__PURE__*/_interopNamespace(require('cross-fetch')); })).fetch;
+        }
+    } catch {
+        fetch = window.fetch;
+    }
+    const headers = {
+        credential: "include",
+        cache: "force-cache",
+        mode: "cors"
+    };
+    const response = await fetch(URL, headers);
     let data = await response.arrayBuffer();
     /* const data = await axios.get(URL, {
         responseType: "arraybuffer",        
@@ -350,6 +380,7 @@ const FMNIST_LABELS_DICT = {
     8: "Bag",
     9: "Ankle boot"
 };
+
 
 /**
  * Downloads and samples the FMNIST dataset.
