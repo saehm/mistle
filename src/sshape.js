@@ -30,7 +30,7 @@ export default function sshape({N = 400, noise = 0, width = 20, seed = 4711, num
         })
     }
     
-    return {values, labels, columns, statistics: getStatistics({values, labels, columns})};
+    return {values, labels, columns, statistics: getStatistics({values, columns})};
 }
 
 export const SSHAPE = sshape();

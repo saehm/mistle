@@ -32,7 +32,7 @@ export default function rays({N = 400, D = 7, noise = 0, touching = true, length
         })
     }
     
-    return {values, labels, columns, statistics: getStatistics({values, labels, columns})};
+    return {values, labels, columns, statistics: getStatistics({values, columns})};
 }
 
 export const RAYS = rays();

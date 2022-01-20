@@ -41,7 +41,7 @@ export default function moons({N = 400, noise = 0, open=0.5, seed = 4711} = {}) 
         })
     }
     
-    return {values, labels, columns, statistics: getStatistics({values, labels, columns})};
+    return {values, labels, columns, statistics: getStatistics({values, columns})};
 }
 
 export const MOONS = moons();

@@ -32,7 +32,7 @@ export default function swissroll({N = 400, alpha_start = 1, alpha_end = 2.5, no
         })
     }
     
-    return {values, labels, columns, statistics: getStatistics({values, labels, columns})};
+    return {values, labels, columns, statistics: getStatistics({values, columns})};
 }
 
 export const SWISSROLL = swissroll();

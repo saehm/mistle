@@ -2,15 +2,14 @@ import { Randomizer } from "@saehrimnir/druidjs";
 import { getStatistics } from "./utils.js";
 
 /**
- * Creates a uniform grid in 2d and adds a third dimensions by sin(x * {@link freq_x}) * cos(y * {@link freq_y}) * {@link amplitude}.
+ * Creates a dataset consisting of some gaussian blobs.
  * @param {Object} parameters 
  * @param {Number} [parameters.N = 400] - Number of points.
- * @param {Float} [parameters.freq_x = 1] - Multiplicator for sin in the x-direction.
- * @param {Float} [parameters.freq_y = 1] - Multiplicator for cos in the y-direction.
- * @param {Float} [parameters.amplitude = 2] - Amplitutde for z-direction.
- * @param {Float} [parameters.noise = 0] - Add uniform noise to each point at each direction.
+ * @param {Number} [parameters.D = 3] - Dimensionality of the dataset.
+ * @param {Array<Array>|Number} [parameters.centers = 3] - Either number of blobs, or their centers.
+ * @param {Array<Array>|Number} [parameters.deviations = 1] - If a number given the deviation of the blobs in each dimension, else an array consisting the deviations for all blobs for all directions.
  * @param {Number} [parameters.seed = 4711] - Seed for the random number generator.
- * @returns {{values: Array<Array>, labels: Array<String>, columns: Array<String>, statistics: Object}} - The final waves dataset.
+ * @returns {{values: Array<Array>, labels: Array<String>, columns: Array<String>, statistics: Object}} - The final blobs dataset.
  */
 export default function blobs({N = 400, D = 3, centers, deviations, seed = 4711} = {}) {
     const R = new Randomizer(seed);
@@ -59,13 +58,12 @@ export default function blobs({N = 400, D = 3, centers, deviations, seed = 4711}
         }
     }
     
-    return {values, labels, columns, statistics: getStatistics({values, labels, columns})};
+    return {values, labels, columns, statistics: getStatistics({values, columns})};
 }
 
 export const BLOBS = blobs();
 
 // https://github.com/d3/d3-random/blob/588790e06454c27f7dae4e7cffeadf2c783d88c3/src/normal.js
-
 function randomNormal(R, mu = 0, sigma = 1) {
     let x;
     let r;

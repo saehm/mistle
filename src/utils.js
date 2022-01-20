@@ -45,8 +45,7 @@ export function getStatistics({values, columns}) {
     return result;
 }
 
-
-export async function fetch_data(URL) {
+async function get_fetch() {
     let fetch;
     try {
         if (process && typeof process !== undefined && process.release.name === "node") {
@@ -55,13 +54,26 @@ export async function fetch_data(URL) {
     } catch {
         fetch = window.fetch;
     }
-    const headers = {
-        credential: "include",
-        cache: "force-cache",
-        mode: "cors"
-    };
+    return fetch;
+}
+
+const headers = {
+    credential: "include",
+    cache: "force-cache",
+    mode: "cors"
+};
+
+export async function fetch_data(URL) {
+    const fetch = await get_fetch();
     const response = await fetch(URL, headers);
     let data = await response.arrayBuffer();
     data = pako.inflate(data)
     return data;
+}
+
+export async function fetch_csv(URL, {delimiter = ";"}) {
+    const fetch = await get_fetch();
+    const response = await fetch(URL, headers);
+    const data = await response.text();
+    return data.split('\n').map(line => line.split(delimiter).map(entry => entry.trim().replaceAll('"', '')));
 }

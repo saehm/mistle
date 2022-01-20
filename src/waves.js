@@ -31,7 +31,7 @@ export default function waves({N = 400, freq_x = 1, freq_y = 1, amplitude = 2, n
         })
     }
     
-    return {values, labels, columns, statistics: getStatistics({values, labels, columns})};
+    return {values, labels, columns, statistics: getStatistics({values, columns})};
 }
 
 export const WAVES = waves();

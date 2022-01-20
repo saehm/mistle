@@ -18,7 +18,6 @@ const FMNIST_LABELS_DICT = {
     9: "Ankle boot"
 }
 
-
 /**
  * Downloads and samples the FMNIST dataset.
  * @param {Object} parameters
@@ -56,5 +55,5 @@ export default async function({N = 400, seed = 4711, items = [0, 1, 2, 3, 4, 5, 
         labels.push(FMNIST_LABELS_DICT[raw_labels[8 + i]]);
     }
     const columns = Array.from({length: 28 * 28}, (_, i) => `pixel_at_${i % 28}_${Math.floor(i / 28)}`);
-    return {values, labels, columns, statistics: getStatistics({values, labels, columns})};
+    return {values, labels, columns, statistics: getStatistics({values, columns})};
 }

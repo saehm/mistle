@@ -21,7 +21,7 @@ test("rays", (t) => {
     t.end();
 });
 
-["fetch_mnist", "fetch_fmnist"].forEach(dataset => {
+/* ["fetch_mnist", "fetch_fmnist"].forEach(dataset => {
     test(dataset, async (t) => {
         const {values, columns, labels} = await datasets[dataset]({digits: [2, 3], items: [6, 7], big: false});
         testValues(t, values, 400, 28 * 28);
@@ -48,7 +48,7 @@ test("rays", (t) => {
         }
         t.end()
     })
-})
+}) */
 
 
 const dataset_infos = {
@@ -103,7 +103,7 @@ function testLabels(t, labels, N) {
 }
 
 function testValues(t, values, N, D) {
-    t.equals(values.length, N, "right number of rows");
+    if (N) t.equals(values.length, N, "right number of rows");
     let all_numbers = true;
     for (const value of values.flat()) {
         all_numbers = all_numbers && !isNaN(value);
@@ -115,3 +115,14 @@ function testColumns(t, columns, D) {
     t.equals(columns.length, D, "right amount of columns")
 }
 
+test("penguins", (t) => {
+    const {values, columns, labels, sex, year, island} = datasets.penguins({removeMissingValues: "values"});
+    const N = values.length;
+    testValues(t, values);
+    testLabels(t, labels, N);
+    testLabels(t, sex, N);
+    testLabels(t, year, N);
+    testLabels(t, island, N);
+    testColumns(t, columns, 4)
+    t.end()
+})

@@ -9,6 +9,7 @@ export { default as sshape, SSHAPE } from "./src/sshape.js";
 export { default as rays, RAYS } from "./src/rays.js";
 export { default as moons, MOONS } from "./src/moons.js";
 export { default as blobs, BLOBS } from "./src/blobs.js";
+export { default as penguins, PENGUINS } from "./src/penguins.js";
 
 export { default as fetch_mnist } from "./src/mnist.js";
 export { default as fetch_fmnist } from "./src/fmnist.js";

@@ -2,7 +2,6 @@ import { terser } from "rollup-plugin-terser";
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import nodePolyfills from 'rollup-plugin-node-polyfills';
-import replace from "@rollup/plugin-replace";
 import json from '@rollup/plugin-json';
 import * as meta from "./package.json";
 
@@ -30,10 +29,6 @@ export default [{
     external: ["cross-fetch", "cross-fetch/polyfill"],
     plugins: [
         json({compact: true}),
-        replace({
-            'import fetch from "cross-fetch";': "",
-            preventAssignment: true
-        }),
         nodePolyfills({browser: true}),
         resolve(),
         commonjs()
@@ -51,10 +46,6 @@ export default [{
     external: ["cross-fetch", "cross-fetch/polyfill"],
     plugins: [
         json({compact: true}), 
-        replace({
-            'import fetch from "cross-fetch";': '',
-            preventAssignment: true
-        }),
         nodePolyfills({browser: true}),
         resolve(),
         commonjs(),

@@ -20,7 +20,6 @@ export default async function({N = 400, seed = 4711, digits = [0, 1, 2, 3, 4, 5,
     const raw_values = await fetch_data(big ? MNIST_TRAIN_VALUES_URL : MNIST_TEST_VALUES_URL);
     const raw_labels = await fetch_data(big ? MNIST_TRAIN_LABELS_URL : MNIST_TEST_LABELS_URL);
 
-
     let all_labels = []
     for (let i = 0; i < (big ? 60000 : 10000); ++i) {
         all_labels[i] = raw_labels[8 + i];
@@ -44,5 +43,5 @@ export default async function({N = 400, seed = 4711, digits = [0, 1, 2, 3, 4, 5,
         labels.push(raw_labels[8 + i]);
     }
     const columns = Array.from({length: 28 * 28}, (_, i) => `pixel_at_${i % 28}_${Math.floor(i / 28)}`);
-    return {values, labels, columns, statistics: getStatistics({values, labels, columns})};
+    return {values, labels, columns, statistics: getStatistics({values, columns})};
 }
