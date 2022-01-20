@@ -89,12 +89,21 @@ const dataset_infos = {
     })
 });
 
+test("blobs", (t) => {
+    const {values, columns, labels} = datasets.blobs({N: 400, D: 2, centers: 6});
+    testValues(t,values, 400, 2);
+    testColumns(t, columns, 2);
+    testLabels(t, labels, 400)
+    t.equals(new Set(labels).size, 6, "right number of distinct labels")
+    t.end()
+})
+
 function testLabels(t, labels, N) {
-    t.equals(labels.length, N);
+    t.equals(labels.length, N, "right amount of labels");
 }
 
 function testValues(t, values, N, D) {
-    t.equals(values.length, N);
+    t.equals(values.length, N, "right number of rows");
     let all_numbers = true;
     for (const value of values.flat()) {
         all_numbers = all_numbers && !isNaN(value);
@@ -103,6 +112,6 @@ function testValues(t, values, N, D) {
 }
 
 function testColumns(t, columns, D) {
-    t.equals(columns.length, D)
+    t.equals(columns.length, D, "right amount of columns")
 }
 
