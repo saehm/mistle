@@ -1,6 +1,7 @@
 export * as IRIS from "./dataset/iris.json";
 export * as OECD from "./dataset/oecd.json";
 export * as SPOTIFY from "./dataset/spotify.json";
+export * as MAMMOTH from "./dataset/mammoth.json";
 
 export { default as waves, WAVES } from "./src/waves.js";
 export { default as swissroll, SWISSROLL } from "./src/swissroll.js";

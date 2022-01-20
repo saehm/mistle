@@ -1,4 +1,3 @@
-
 import pako from "pako";
 
 export const TAU = Math.PI * 2;
@@ -63,9 +62,6 @@ export async function fetch_data(URL) {
     };
     const response = await fetch(URL, headers);
     let data = await response.arrayBuffer();
-    /* const data = await axios.get(URL, {
-        responseType: "arraybuffer",        
-    }) */
     data = pako.inflate(data)
     return data;
 }
