@@ -21,7 +21,7 @@ test("rays", (t) => {
     t.end();
 });
 
-/* ["fetch_mnist", "fetch_fmnist"].forEach(dataset => {
+["fetch_mnist", "fetch_fmnist", "fetch_kmnist"].forEach(dataset => {
     test(dataset, async (t) => {
         const {values, columns, labels} = await datasets[dataset]({digits: [2, 3], items: [6, 7], big: false});
         testValues(t, values, 400, 28 * 28);
@@ -48,7 +48,7 @@ test("rays", (t) => {
         }
         t.end()
     })
-}) */
+})
 
 
 const dataset_infos = {

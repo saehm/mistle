@@ -1,5 +1,3 @@
-import pako from "pako";
-
 export const TAU = Math.PI * 2;
 
 export function scaleLinear([min, max], [from, to]) {
@@ -29,23 +27,26 @@ export function deviation(array, acc = d => d) {
     for (const entry of array) {
         dev += (acc(entry) - mean);
     }
-    return dev / N;
+    return [mean, dev / N];
 }
 
 export function getStatistics({values, columns}) {
-    let result = {};
-    columns.forEach((dimension, i) => {
-        result[dimension] = {};
-        const std = deviation(values, row => row[i]);
-        result[dimension].std = std;
-        const [min, max] = extent(values, row => row[i]);
-        result[dimension].min = min;
-        result[dimension].max = max;
-    })
-    return result;
+    return function() {
+        let result = {};
+        columns.forEach((dimension, i) => {
+            result[dimension] = {};
+            const [mean, std] = deviation(values, row => row[i]);
+            result[dimension].std = std;
+            result[dimension].mean = mean;
+            const [min, max] = extent(values, row => row[i]);
+            result[dimension].min = min;
+            result[dimension].max = max;
+        })
+        return result;
+    }
 }
 
-async function get_fetch() {
+export async function get_fetch() {
     let fetch;
     try {
         if (process && typeof process !== undefined && process.release.name === "node") {
@@ -57,23 +58,13 @@ async function get_fetch() {
     return fetch;
 }
 
-const headers = {
-    credential: "include",
-    cache: "force-cache",
-    mode: "cors"
-};
-
-export async function fetch_data(URL) {
-    const fetch = await get_fetch();
-    const response = await fetch(URL, headers);
-    let data = await response.arrayBuffer();
-    data = pako.inflate(data)
-    return data;
-}
-
-export async function fetch_csv(URL, {delimiter = ";"}) {
-    const fetch = await get_fetch();
-    const response = await fetch(URL, headers);
-    const data = await response.text();
-    return data.split('\n').map(line => line.split(delimiter).map(entry => entry.trim().replaceAll('"', '')));
+export function parse_openml_mnist_data(raw_data, fn_apply_to_value = (v) => v) {
+    const [all_columns, ...values_tmp] = raw_data.split(/\r?\n|\r/).map(row => row.split(","));
+    const all_labels = [];
+    const all_values = [];
+    values_tmp.forEach((row) => {
+        all_values.push(row.slice(0, -1).map(fn_apply_to_value));
+        all_labels.push(row.slice(-1)[0]);
+    });
+    return { all_columns, all_values, all_labels };
 }

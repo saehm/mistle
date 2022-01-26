@@ -37,7 +37,7 @@ export default function penguins({removeMissingValues = "all"} = {}) {
     }
     // rollup removes columns from this function call
     // const statistics = getStatistics(values, PENGUINS_RAW.columns);
-    return {values, columns, labels, sex, year, island, statistics};
+    return {values, columns, labels, sex, year, island, statistics: getStatistics(values, columns)};
 }
 
 function filter(values, indices) {

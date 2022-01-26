@@ -11,5 +11,9 @@ export { default as moons, MOONS } from "./src/moons.js";
 export { default as blobs, BLOBS } from "./src/blobs.js";
 export { default as penguins, PENGUINS } from "./src/penguins.js";
 
+export { default as fetch_openml } from "./src/openml.js";
 export { default as fetch_mnist } from "./src/mnist.js";
 export { default as fetch_fmnist } from "./src/fmnist.js";
+export { default as fetch_kmnist } from "./src/kmnist.js";
+
+export { version } from "./package.json"

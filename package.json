@@ -1,6 +1,6 @@
 {
   "name": "@saehrimnir/dataset",
-  "version": "0.1.5",
+  "version": "0.2.1",
   "keywords": [
     "dataset",
     "iris",
@@ -48,7 +48,6 @@
   },
   "dependencies": {
     "@saehrimnir/druidjs": "^0.3.16",
-    "cross-fetch": "^3.1.4",
-    "pako": "^2.0.4"
+    "cross-fetch": "^3.1.4"
   }
 }
