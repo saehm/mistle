@@ -1,14 +1,29 @@
 import { getStatistics } from "./utils.js";
-import * as PENGUINS_RAW from "../dataset/penguins.json";
+import PENGUINS_RAW from "../dataset/penguins.json" with { type: "json" };
 
 /**
  * Returns the Palmers Penguins dataset.
+ *
  * @param {Object} parameters
- * @param {false|"all"|"values"} [removeMissingValues = "all"] - Remove missing values, if "all" then remove all rows if a null is in any column. If "values", then remove rows only if only the respective row in values contains a null. If false, then no missing value gets removed.
- * @returns {{values: Array<Array>, labels: Array<String>, columns: Array<String>, sex: Array<String>, year: Array<Number>, island: Array<String>, statistics: Object}} - The final penguins dataset.
+ * @param {false | "all" | "values"} [removeMissingValues="all"] - Remove
+ *   missing values, if "all" then remove all rows if a null is in any column.
+ *   If "values", then remove rows only if only the respective row in values
+ *   contains a null. If false, then no missing value gets removed. Default is
+ *   `"all"`
+ * @returns {{
+ *     values: Array[];
+ *     labels: String[];
+ *     columns: String[];
+ *     sex: String[];
+ *     year: Number[];
+ *     island: String[];
+ *     statistics: Object;
+ * }}
+ *   - The final penguins dataset.
  */
-export default function penguins({removeMissingValues = "all"} = {}) {
-    let {values, columns, labels, sex, year, island, statistics} = PENGUINS_RAW;
+export default function penguins({ removeMissingValues = "all" } = {}) {
+    let { values, columns, labels, sex, year, island, statistics } =
+        PENGUINS_RAW;
     if (removeMissingValues == "all" || removeMissingValues == "values") {
         const N = values.length;
         let valid_indices = [];
@@ -21,11 +36,14 @@ export default function penguins({removeMissingValues = "all"} = {}) {
                     result = result && false;
                 }
             }
-            if (removeMissingValues == "all" || removeMissingValues == "values") {
+            if (
+                removeMissingValues == "all" ||
+                removeMissingValues == "values"
+            ) {
                 for (const value of values[i]) {
                     result = result && !Number.isNaN(value);
                 }
-            }   
+            }
             if (result == true) valid_indices.push(i);
         }
 
@@ -37,11 +55,19 @@ export default function penguins({removeMissingValues = "all"} = {}) {
     }
     // rollup removes columns from this function call
     // const statistics = getStatistics(values, PENGUINS_RAW.columns);
-    return {values, columns, labels, sex, year, island, statistics: getStatistics(values, columns)};
+    return {
+        values,
+        columns,
+        labels,
+        sex,
+        year,
+        island,
+        statistics: getStatistics(values, columns),
+    };
 }
 
 function filter(values, indices) {
-    return indices.map(i => values[i]);
+    return indices.map((i) => values[i]);
 }
 
 export const PENGUINS = penguins();

@@ -4,13 +4,13 @@
 cff-version: 1.2.0
 title: mistle
 message: >-
-  If you use this software, please cite it using the
-  metadata from this file.
+    If you use this software, please cite it using the
+    metadata from this file.
 type: software
 authors:
-  - given-names: Rene
-    family-names: Cutura
-    email: rene.cutura@visus.uni-stuttgart.de
-    affiliation: University of Stuttgart
-    orcid: 'https://orcid.org/0000-0001-7756-0901'
-repository-code: 'https://github.com/saehm/mistle'
+    - given-names: Rene
+      family-names: Cutura
+      email: rene.cutura@visus.uni-stuttgart.de
+      affiliation: University of Stuttgart
+      orcid: "https://orcid.org/0000-0001-7756-0901"
+repository-code: "https://github.com/saehm/mistle"
