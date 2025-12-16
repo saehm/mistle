@@ -915,7 +915,7 @@ async function kmnist ({
     };
 }
 
-var version$1="0.2.3";var meta = {version:version$1};
+var version$1="0.2.4";var meta = {version:version$1};
 
 const version = meta.version;
 
