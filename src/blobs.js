@@ -41,7 +41,7 @@ export default function blobs({
     }
 
     if (!Array.isArray(centers)) {
-        throw "Centers needs to be an array, an integer, or null (defaults to centers = 3)!";
+        throw new Error("Centers needs to be an array, an integer, or null (defaults to centers = 3)!");
     }
 
     if (!deviations) {
@@ -53,7 +53,7 @@ export default function blobs({
             );
         }
         if (Array.isArray(deviations) && deviations.length != centers.length) {
-            throw "If deviations is given, then its value needs to be a number or an array of the same length as centers! (defaults to deviations = 1)";
+            throw new Error("If deviations is given, then its value needs to be a number or an array of the same length as centers! (defaults to deviations = 1)");
         }
     }
 
