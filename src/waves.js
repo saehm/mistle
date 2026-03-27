@@ -6,24 +6,13 @@ import { getStatistics } from "./utils.js";
  * {@link freq_x}) * cos(y * {@link freq_y}) * {@link amplitude}.
  *
  * @param {Object} parameters
- * @param {Number} [parameters.N=400] - Number of points. Default is `400`
- * @param {number} [parameters.freq_x=1] - Multiplicator for sin in the
- *   x-direction. Default is `1`
- * @param {Float} [parameters.freq_y=1] - Multiplicator for cos in the
- *   y-direction. Default is `1`
- * @param {Float} [parameters.amplitude=2] - Amplitutde for z-direction. Default
- *   is `2`
- * @param {Float} [parameters.noise=0] - Add uniform noise to each point at each
- *   direction. Default is `0`
- * @param {Number} [parameters.seed=4711] - Seed for the random number
- *   generator. Default is `4711`
- * @returns {{
- *     values: Array[];
- *     labels: String[];
- *     columns: String[];
- *     statistics: Object;
- * }}
- *   - The final waves dataset.
+ * @param {number} [parameters.N=400] - Number of points. Default is `400`
+ * @param {number} [parameters.freq_x=1] - Multiplicator for sin in the x-direction. Default is `1`
+ * @param {number} [parameters.freq_y=1] - Multiplicator for cos in the y-direction. Default is `1`
+ * @param {number} [parameters.amplitude=2] - Amplitude for z-direction. Default is `2`
+ * @param {number} [parameters.noise=0] - Add uniform noise to each point at each direction. Default is `0`
+ * @param {number} [parameters.seed=4711] - Seed for the random number generator. Default is `4711`
+ * @returns {import("./utils.js").MistleDataset} The final waves dataset.
  */
 export default function waves({
     N = 400,

@@ -5,20 +5,13 @@ import { getStatistics } from "./utils.js";
  * Creates a s-shape.
  *
  * @param {Object} parameters
- * @param {Number} parameters.N - Number of points.
- * @param {Float} parameters.noise - Add uniform noise to each point at each
- *   direction.
- * @param {Float} parameters.width - Width of the s-shape.
- * @param {Number} parameters.seed - Seed for the random number generator.
- * @param {Number} parameters.num_labels - Number of labels for the s-shape,
+ * @param {number} [parameters.N=400] - Number of points.
+ * @param {number} [parameters.noise=0] - Add uniform noise to each point at each direction.
+ * @param {number} [parameters.width=20] - Width of the s-shape.
+ * @param {number} [parameters.seed=4711] - Seed for the random number generator.
+ * @param {number} [parameters.num_labels=8] - Number of labels for the s-shape,
  *   partitions the s-shape in num_labels parts according to the angle.
- * @returns {{
- *     values: Array[];
- *     labels: String[];
- *     columns: String[];
- *     statistics: Object;
- * }}
- *   - The final s-shape dataset.
+ * @returns {import("./utils.js").MistleDataset} The final s-shape dataset.
  */
 export default function sshape({
     N = 400,

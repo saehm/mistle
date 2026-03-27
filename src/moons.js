@@ -5,20 +5,12 @@ import { TAU, scaleLinear, getStatistics } from "./utils.js";
  * Creates a 'moons' dataset consisting of two intersecting circles.
  *
  * @param {Object} parameters
- * @param {Number} parameters.N - Number of points.
- * @param {Float} parameters.noise - Add uniform noise to each point at each
- *   direction.
- * @param {Float} parameters.open - How open the circles should be. Takes a
- *   value in [0 and 1), where 0 creates two full circles, 0.5 create two half
- *   circles.
- * @param {Number} parameters.seed - Seed for the random number generator.
- * @returns {{
- *     values: Array[];
- *     labels: String[];
- *     columns: String[];
- *     statistics: Object;
- * }}
- *   - The final moons dataset.
+ * @param {number} [parameters.N=400] - Number of points.
+ * @param {number} [parameters.noise=0] - Add uniform noise to each point at each direction.
+ * @param {number} [parameters.open=0.5] - How open the circles should be. Takes a value in
+ *   [0, 1), where 0 creates two full circles, 0.5 creates two half circles.
+ * @param {number} [parameters.seed=4711] - Seed for the random number generator.
+ * @returns {import("./utils.js").MistleDataset} The final moons dataset.
  */
 export default function moons({
     N = 400,

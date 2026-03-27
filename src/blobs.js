@@ -16,13 +16,7 @@ import { getStatistics, randomNormal } from "./utils.js";
  *   deviations for all blobs for all directions. Default is `1`
  * @param {number} [parameters.seed=4711] - Seed for the random number
  *   generator. Default is `4711`
- * @returns {{
- *     values: number[][];
- *     labels: string[];
- *     columns: string[];
- *     statistics: () => Record<string, import("./utils.js").Statistics>;
- * }}
- *   - The final blobs dataset.
+ * @returns {import("./utils.js").MistleDataset} The final blobs dataset.
  */
 export default function blobs({
     N = 400,

@@ -5,24 +5,13 @@ import { getStatistics } from "./utils.js";
  * Creates a rays dataset consisting of {@link parameters.D} rays.
  *
  * @param {Object} parameters
- * @param {Number} [parameters.N=400] - Roughly the number of points, uses
- *   round(N / D) * D. Default is `400`
- * @param {Number} [parameters.D=7] - Number of rays, and number of the results
- *   dimensionality. Creates a ray per direction. Default is `7`
- * @param {Float} [parameters.noise=0] - Add uniform noise to each point at each
- *   direction. Default is `0`
- * @param {Boolean} [parameters.touching=false] - Defines if the rays touches
- *   each other at the origin. Default is `false`
- * @param {Float} [paramter.length=12] - Length of each ray. Default is `12`
- * @param {Number} [parameters.seed=4711] - Seed for the random number
- *   generator. Default is `4711`
- * @returns {{
- *     values: Array[];
- *     labels: String[];
- *     columns: String[];
- *     statistics: Object;
- * }}
- *   - The final rays dataset.
+ * @param {number} [parameters.N=400] - Roughly the number of points, uses round(N / D) * D. Default is `400`
+ * @param {number} [parameters.D=7] - Number of rays and dimensionality of the result. Default is `7`
+ * @param {number} [parameters.noise=0] - Add uniform noise to each point at each direction. Default is `0`
+ * @param {boolean} [parameters.touching=true] - Whether the rays touch each other at the origin. Default is `true`
+ * @param {number} [parameters.length=12] - Length of each ray. Default is `12`
+ * @param {number} [parameters.seed=4711] - Seed for the random number generator. Default is `4711`
+ * @returns {import("./utils.js").MistleDataset} The final rays dataset.
  */
 export default function rays({
     N = 400,

@@ -55,6 +55,14 @@ export function deviation(array, acc = (d) => d) {
  */
 
 /**
+ * @typedef MistleDataset
+ * @property {number[][]} values - Array of feature vectors.
+ * @property {string[]} labels - Class or group label for each row.
+ * @property {string[]} columns - Feature names.
+ * @property {() => Record<string, Statistics>} statistics - Lazily computed per-column statistics.
+ */
+
+/**
  * @param {object} mistle_data
  * @param {number[][]} mistle_data.values
  * @param {string[]} mistle_data.columns

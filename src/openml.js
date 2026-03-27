@@ -9,10 +9,9 @@ const openml_file_api = "https://www.openml.org/data/v1/get_csv/";
 /**
  * Fetches data from openml.org
  *
- * @param {Number} id - Data ID from openml.org
- * @param {String} api_key - Your api-key
- * @returns {Object} - Raw data as string, and the dataset description provided
- *   by openml.org.
+ * @param {number} id - Data ID from openml.org
+ * @param {string} [api_key] - Your api-key
+ * @returns {Promise<{raw_data: string, description: object}>} Raw data as string, and the dataset description provided by openml.org.
  */
 export default async function fetch_openml(id, api_key) {
     let fetch = await get_fetch();

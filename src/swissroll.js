@@ -5,23 +5,15 @@ import { getStatistics, TAU } from "./utils.js";
  * Creates a swissroll.
  *
  * @param {Object} parameters
- * @param {Number} parameters.N - Number of points.
- * @param {Float} parameters.alpha_start - Angle from which the swissroll
- *   starts.
- * @param {Float} parameters.alpha_end - Angle at which the swissroll ends.
- * @param {Float} parameters.noise - Add uniform noise to each point at each
- *   direction.
- * @param {Float} parameters.width - Width of the swissroll.
- * @param {Number} parameters.seed - Seed for the random number generator.
- * @param {Number} parameters.num_labels - Number of labels for the swissroll,
+ * @param {number} [parameters.N=400] - Number of points.
+ * @param {number} [parameters.alpha_start=1] - Angle from which the swissroll starts.
+ * @param {number} [parameters.alpha_end=2.5] - Angle at which the swissroll ends.
+ * @param {number} [parameters.noise=0] - Add uniform noise to each point at each direction.
+ * @param {number} [parameters.width=20] - Width of the swissroll.
+ * @param {number} [parameters.seed=4711] - Seed for the random number generator.
+ * @param {number} [parameters.num_labels=8] - Number of labels for the swissroll,
  *   partitions the swissroll in num_labels parts according to the angle.
- * @returns {{
- *     values: Array[];
- *     labels: String[];
- *     columns: String[];
- *     statistics: Object;
- * }}
- *   - The final swissroll dataset.
+ * @returns {import("./utils.js").MistleDataset} The final swissroll dataset.
  */
 export default function swissroll({
     N = 400,

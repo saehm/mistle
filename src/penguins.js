@@ -6,20 +6,13 @@ import PENGUINS_RAW from "../dataset/penguins.json" with { type: "json" };
  *
  * @param {Object} parameters
  * @param {false | "all" | "values"} [removeMissingValues="all"] - Remove
- *   missing values, if "all" then remove all rows if a null is in any column.
- *   If "values", then remove rows only if only the respective row in values
- *   contains a null. If false, then no missing value gets removed. Default is
- *   `"all"`
- * @returns {{
- *     values: Array[];
- *     labels: String[];
- *     columns: String[];
- *     sex: String[];
- *     year: Number[];
- *     island: String[];
- *     statistics: Object;
- * }}
- *   - The final penguins dataset.
+ *   missing values. `"all"` removes rows with any null. `"values"` removes rows
+ *   only when the feature values contain nulls. `false` keeps all rows. Default is `"all"`.
+ * @returns {import("./utils.js").MistleDataset & {
+ *     sex: string[];
+ *     year: number[];
+ *     island: string[];
+ * }} The final penguins dataset.
  */
 export default function penguins({ removeMissingValues = "all" } = {}) {
     let { values, columns, labels, sex, year, island, statistics } =
