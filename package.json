@@ -61,7 +61,6 @@
         "typescript": "^6.0.2"
     },
     "dependencies": {
-        "@saehrimnir/druidjs": "0.8.0",
-        "cross-fetch": "^4.1.0"
+        "@saehrimnir/druidjs": "0.8.0"
     }
 }

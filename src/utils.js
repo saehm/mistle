@@ -87,17 +87,13 @@ export function getStatistics({ values, columns }) {
     };
 }
 
-export async function get_fetch() {
-    let fetch;
-    try {
-        if (
-            typeof process !== "undefined" &&
-            process.release.name === "node"
-        ) {
-            fetch = (await import("cross-fetch")).fetch;
-        }
-    } catch {
-        fetch = window.fetch;
+/**
+ * Returns the global fetch function. Requires Node.js 18+ or a browser environment.
+ * @returns {typeof globalThis.fetch}
+ */
+export function get_fetch() {
+    if (typeof fetch === "undefined") {
+        throw new Error("fetch is not available. Node.js 18+ or a browser with fetch support is required.");
     }
     return fetch;
 }

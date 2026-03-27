@@ -27,7 +27,7 @@ export default [
             name: "datasets",
             sourcemap: true,
         },
-        external: ["cross-fetch", "cross-fetch/polyfill"],
+        external: [],
         plugins: [
             json({ compact: true }),
             nodePolyfills({ browser: true }),
@@ -45,7 +45,7 @@ export default [
             name: "datasets",
             sourcemap: true,
         },
-        external: ["cross-fetch", "cross-fetch/polyfill"],
+        external: [],
         plugins: [
             json({ compact: true }),
             nodePolyfills({ browser: true }),
