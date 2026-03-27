@@ -4,8 +4,8 @@ import PENGUINS_RAW from "../dataset/penguins.json" with { type: "json" };
 /**
  * Returns the Palmers Penguins dataset.
  *
- * @param {Object} parameters
- * @param {false | "all" | "values"} [removeMissingValues="all"] - Remove
+ * @param {{removeMissingValues?: false | "all" | "values"}} [parameters={}]
+ * @param {false | "all" | "values"} [parameters.removeMissingValues="all"] - Remove
  *   missing values. `"all"` removes rows with any null. `"values"` removes rows
  *   only when the feature values contain nulls. `false` keeps all rows. Default is `"all"`.
  * @returns {import("./utils.js").MistleDataset & {

@@ -18,20 +18,13 @@ const FMNIST_LABELS_DICT = {
 /**
  * Downloads and samples the FMNIST dataset.
  *
- * @param {Object} parameters
- * @param {Number} [N=400] - Number of points. Default is `400`
- * @param {Number} [seed=4711] - Seed for the random number generator. Default
- *   is `4711`
- * @param {Number[]} [items=[0,1,2,3,4,5,6,7,8,9]] - Filter for which items end
- *   up in the final dataset. Default is `[0,1,2,3,4,5,6,7,8,9]`
- * @param {String} [api_key=null] - API key for OpenML. Default is `null`
- * @returns {{
- *     values: Array[];
- *     labels: String[];
- *     columns: String[];
- *     statistics: Object;
- * }}
- *   - The final FMNIST dataset sample.
+ * @param {{N?: number, seed?: number, items?: number[], api_key?: string}} [parameters={}]
+ * @param {number} [parameters.N=400] - Number of points. Default is `400`
+ * @param {number} [parameters.seed=4711] - Seed for the random number generator. Default is `4711`
+ * @param {number[]} [parameters.items=[0,1,2,3,4,5,6,7,8,9]] - Filter for which items
+ *   end up in the final dataset. Default is `[0,1,2,3,4,5,6,7,8,9]`
+ * @param {string} [parameters.api_key] - API key for OpenML.
+ * @returns {Promise<import("./utils.js").MistleDataset & {description: object}>} The final FMNIST dataset sample.
  */
 export default async function ({
     N = 400,

@@ -5,20 +5,13 @@ import { default as fetch_openml } from "./openml.js";
 /**
  * Downloads and samples the MNIST dataset.
  *
- * @param {Object} parameters
- * @param {Number} [N=400] - Number of points. Default is `400`
- * @param {Number} [seed=4711] - Seed for the random number generator. Default
- *   is `4711`
- * @param {Number[]} [digits=[0,1,2,3,4,5,6,7,8,9]] - Filter for which digits
+ * @param {{N?: number, seed?: number, digits?: number[], api_key?: string}} [parameters={}]
+ * @param {number} [parameters.N=400] - Number of points. Default is `400`
+ * @param {number} [parameters.seed=4711] - Seed for the random number generator. Default is `4711`
+ * @param {number[]} [parameters.digits=[0,1,2,3,4,5,6,7,8,9]] - Filter for which digits
  *   end up in the final dataset. Default is `[0,1,2,3,4,5,6,7,8,9]`
- * @param {String} [api_key=null] - API key for OpenML. Default is `null`
- * @returns {{
- *     values: Array[];
- *     labels: String[];
- *     columns: String[];
- *     statistics: Object;
- * }}
- *   - The final MNIST dataset sample.
+ * @param {string} [parameters.api_key] - API key for OpenML.
+ * @returns {Promise<import("./utils.js").MistleDataset & {description: object}>} The final MNIST dataset sample.
  */
 export default async function ({
     N = 400,
