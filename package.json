@@ -27,11 +27,18 @@
         "url": "https://github.com/saehm/mistle/issues"
     },
     "type": "module",
-    "main": "src/main.js",
+    "main": "dist/mistle.js",
     "types": "dist/mistle.d.ts",
     "browser": "dist/mistle.es.js",
     "unpkg": "dist/mistle.min.js",
     "jsdelivr": "dist/mistle.min.js",
+    "exports": {
+        ".": {
+            "import": "./dist/mistle.es.js",
+            "require": "./dist/mistle.js",
+            "types": "./dist/mistle.d.ts"
+        }
+    },
     "scripts": {
         "build": "tsc && rollup -c",
         "dev": "rollup -cw",
