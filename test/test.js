@@ -1,7 +1,7 @@
 //const test = require("tape");
 //const datasets = require("../dist/dataset.js");
 import { test } from "tape";
-import * as datasets from "../index.js";
+import * as datasets from "../src/main.js";
 
 ["swissroll", "waves", "sshape", "moons"].forEach((dataset) => {
     test(dataset, (t) => {

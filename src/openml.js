@@ -38,5 +38,5 @@ export default async function fetch_openml(id, api_key) {
     }
     const raw_data = await file_response.text();
 
-    return { raw_data, description: {} };
+    return { raw_data, description: description.data_set_description };
 }
