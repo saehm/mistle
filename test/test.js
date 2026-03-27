@@ -93,7 +93,6 @@ const dataset_infos = {
         test(dataset, (t) => {
             const { N, D } = dataset_infos[dataset];
             const { values, columns, labels } = datasets[dataset];
-            console.log(datasets[dataset], values, columns, labels);
             testValues(t, values, N, D);
             testColumns(t, columns, D);
             testLabels(t, labels, N);
@@ -112,6 +111,36 @@ test("blobs", (t) => {
     testColumns(t, columns, 2);
     testLabels(t, labels, 400);
     t.equals(new Set(labels).size, 6, "right number of distinct labels");
+    t.end();
+});
+
+test("blobs errors", (t) => {
+    t.throws(
+        () => datasets.blobs({ centers: "invalid" }),
+        /Error/,
+        "throws for invalid centers type",
+    );
+    t.throws(
+        () => datasets.blobs({ centers: [[0, 0], [1, 1]], deviations: [1, 2, 3] }),
+        /Error/,
+        "throws when deviations length mismatches centers",
+    );
+    t.end();
+});
+
+test("wine normalize", (t) => {
+    const raw = datasets.wine();
+    const normalized = datasets.wine({ normalize: true });
+    t.equals(normalized.values.length, raw.values.length, "same number of rows");
+    t.equals(normalized.columns.length, raw.columns.length, "same number of columns");
+    let inRange = true;
+    for (const row of normalized.values) {
+        for (const v of row) {
+            if (v < -1e-10 || v > 1 + 1e-10) inRange = false;
+        }
+    }
+    t.ok(inRange, "all normalized values in [0, 1]");
+    t.notDeepEquals(normalized.values[0], raw.values[0], "normalized values differ from raw");
     t.end();
 });
 
