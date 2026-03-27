@@ -89,8 +89,7 @@ export async function get_fetch() {
     let fetch;
     try {
         if (
-            process &&
-            typeof process !== undefined &&
+            typeof process !== "undefined" &&
             process.release.name === "node"
         ) {
             fetch = (await import("cross-fetch")).fetch;
