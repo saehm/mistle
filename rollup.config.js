@@ -3,6 +3,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import nodePolyfills from "rollup-plugin-node-polyfills";
 import json from "@rollup/plugin-json";
 import terser from "@rollup/plugin-terser";
+import dts from "rollup-plugin-dts";
 import meta from "./package.json" with { type: "json" };
 
 const copyright = `// ${meta.homepage} v${meta.version} Copyright ${new Date().getFullYear()} ${meta.author.name}`;
@@ -52,5 +53,10 @@ export default [
             commonjs(),
             terser(),
         ],
+    },
+    {
+        input: "dist/main.d.ts",
+        output: { file: "dist/mistle.d.ts", format: "es" },
+        plugins: [dts()],
     },
 ];

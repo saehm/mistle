@@ -1,3 +1,6 @@
 node_modules
 source
 .ipynb_checkpoints
+dist/types
+dist/*.d.ts
+!dist/mistle.d.ts
