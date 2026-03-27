@@ -26,7 +26,7 @@ export default async function fetch_openml(id, api_key) {
     if (!main_response.ok) {
         throw Error(`${main_response.status} ${main_response.statusText}`);
     }
-    const description = await main_response.json();
+    const description = /** @type {{data_set_description: {file_id: string}}} */ (await main_response.json());
 
     // fetching the file.
     const file_response = await fetch(
