@@ -62,7 +62,7 @@ export default function penguins({ removeMissingValues = "all" } = {}) {
         sex,
         year,
         island,
-        statistics: getStatistics(values, columns),
+        statistics: getStatistics({ values, columns }),
     };
 }
 

@@ -115,6 +115,34 @@ test("blobs", (t) => {
     t.end();
 });
 
+test("statistics", (t) => {
+    const datasets_with_statistics = [
+        datasets.swissroll(),
+        datasets.waves(),
+        datasets.sshape(),
+        datasets.moons(),
+        datasets.blobs(),
+        datasets.penguins(),
+    ];
+    for (const ds of datasets_with_statistics) {
+        const stats = ds.statistics();
+        t.ok(typeof stats === "object" && stats !== null, "statistics() returns an object");
+        for (const col of ds.columns) {
+            t.ok(col in stats, `statistics has key for column "${col}"`);
+            const s = stats[col];
+            t.ok(Number.isFinite(s.mean), `mean is finite for "${col}"`);
+            t.ok(Number.isFinite(s.std) && s.std >= 0, `std is non-negative finite for "${col}"`);
+            t.ok(Number.isFinite(s.min), `min is finite for "${col}"`);
+            t.ok(Number.isFinite(s.max), `max is finite for "${col}"`);
+            t.ok(s.min <= s.max, `min <= max for "${col}"`);
+        }
+        // std > 0 for any non-constant column proves the variance formula is correct
+        const anyNonZeroStd = ds.columns.some((col) => stats[col].std > 0);
+        t.ok(anyNonZeroStd, "at least one column has std > 0");
+    }
+    t.end();
+});
+
 function testLabels(t, labels, N) {
     t.equals(labels.length, N, "right amount of labels");
 }

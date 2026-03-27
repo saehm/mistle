@@ -41,9 +41,9 @@ export function deviation(array, acc = (d) => d) {
     mean /= N;
     let dev = 0;
     for (const entry of array) {
-        dev += acc(entry) - mean;
+        dev += (acc(entry) - mean) ** 2;
     }
-    return [mean, dev / N];
+    return [mean, Math.sqrt(dev / N)];
 }
 
 /**
