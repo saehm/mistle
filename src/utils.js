@@ -13,11 +13,12 @@ export function scaleLinear([min, max], [from, to]) {
 }
 
 /**
- * @param {Iterable<T>} array
+ * @template T
+ * @param {T[]} array
  * @param {(d: T) => number} acc
  * @returns {[number, number]}
  */
-export function extent(array, acc = (d) => d) {
+export function extent(array, acc = (/** @type {any} */ d) => /** @type {number} */ (d)) {
     let min = Infinity;
     let max = -Infinity;
     for (const entry of array) {
@@ -28,11 +29,12 @@ export function extent(array, acc = (d) => d) {
 }
 
 /**
- * @param {Iterable<T>} array
+ * @template T
+ * @param {T[]} array
  * @param {(d: T) => number} acc
  * @returns {[number, number]}
  */
-export function deviation(array, acc = (d) => d) {
+export function deviation(array, acc = (/** @type {any} */ d) => /** @type {number} */ (d)) {
     const N = array.length;
     let mean = 0;
     for (const entry of array) {
@@ -70,10 +72,10 @@ export function deviation(array, acc = (d) => d) {
  */
 export function getStatistics({ values, columns }) {
     return function () {
-        let result = {};
+        /** @type {Record<string, Statistics>} */
+        const result = {};
         columns.forEach((dimension, i) => {
-            /** @type {Record<string, Statistics>} */
-            result[dimension] = {};
+            result[dimension] = /** @type {Statistics} */ ({});
             const [mean, std] = deviation(values, (row) => row[i]);
             result[dimension].std = std;
             result[dimension].mean = mean;

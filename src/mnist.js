@@ -6,11 +6,8 @@ import { default as fetch_openml } from "./openml.js";
  * Downloads and samples the MNIST dataset.
  *
  * @param {{N?: number, seed?: number, digits?: number[], api_key?: string}} [parameters={}]
- * @param {number} [parameters.N=400] - Number of points. Default is `400`
- * @param {number} [parameters.seed=4711] - Seed for the random number generator. Default is `4711`
- * @param {number[]} [parameters.digits=[0,1,2,3,4,5,6,7,8,9]] - Filter for which digits
- *   end up in the final dataset. Default is `[0,1,2,3,4,5,6,7,8,9]`
- * @param {string} [parameters.api_key] - API key for OpenML.
+ *   N: number of points (default 400), seed: RNG seed (default 4711),
+ *   digits: which digits to include (default 0-9), api_key: OpenML API key.
  * @returns {Promise<import("./utils.js").MistleDataset & {description: object}>} The final MNIST dataset sample.
  */
 export default async function ({
@@ -32,7 +29,7 @@ export default async function ({
 
     const indices = all_labels.map((_, i) => i);
     const filtered_indices = digits.map((digit) =>
-        indices.filter((i) => all_labels[i] == digit),
+        indices.filter((i) => all_labels[i] === String(digit)),
     );
     const selected_indices = number_digits
         .map((n, i) => R.choice(filtered_indices[i], n))

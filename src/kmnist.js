@@ -19,11 +19,8 @@ const KMNIST_LABELS_DICT = {
  * Downloads and samples the Kuzushiji-MNIST dataset.
  *
  * @param {{N?: number, seed?: number, letters?: number[], api_key?: string}} [parameters={}]
- * @param {number} [parameters.N=400] - Number of points. Default is `400`
- * @param {number} [parameters.seed=4711] - Seed for the random number generator. Default is `4711`
- * @param {number[]} [parameters.letters=[0,1,2,3,4,5,6,7,8,9]] - Filter for which letters
- *   end up in the final dataset. Default is `[0,1,2,3,4,5,6,7,8,9]`
- * @param {string} [parameters.api_key] - API key for OpenML.
+ *   N: number of points (default 400), seed: RNG seed (default 4711),
+ *   letters: which kana classes to include (default 0-9), api_key: OpenML API key.
  * @returns {Promise<import("./utils.js").MistleDataset & {description: object}>} The final Kuzushiji-MNIST dataset sample.
  * @see {@link https://arxiv.org/abs/1812.01718}
  */
@@ -46,7 +43,7 @@ export default async function ({
 
     const indices = all_labels.map((_, i) => i);
     const filtered_indices = letters.map((digit) =>
-        indices.filter((i) => all_labels[i] == digit),
+        indices.filter((i) => all_labels[i] === String(digit)),
     );
     const selected_indices = number_digits
         .map((n, i) => R.choice(filtered_indices[i], n))
@@ -55,7 +52,7 @@ export default async function ({
     const labels = [];
     for (const i of selected_indices) {
         values.push(all_values[i]);
-        labels.push(KMNIST_LABELS_DICT[all_labels[i]]);
+        labels.push(KMNIST_LABELS_DICT[/** @type {keyof typeof KMNIST_LABELS_DICT} */ (+all_labels[i])]);
     }
     const columns = Array.from(
         { length: 28 * 28 },

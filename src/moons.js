@@ -23,6 +23,7 @@ export default function moons({
     const N_beta = N - N_alpha;
 
     const scale = scaleLinear([0, 1], [open / 2, 1 - open / 2]);
+    /** @type {number[][]} */
     let values = new Array(N);
     const labels = new Array(N);
     const columns = ["moon_X", "moon_Y", "moon_Z"];

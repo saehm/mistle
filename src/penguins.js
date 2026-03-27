@@ -5,9 +5,9 @@ import PENGUINS_RAW from "../dataset/penguins.json" with { type: "json" };
  * Returns the Palmers Penguins dataset.
  *
  * @param {{removeMissingValues?: false | "all" | "values"}} [parameters={}]
- * @param {false | "all" | "values"} [parameters.removeMissingValues="all"] - Remove
- *   missing values. `"all"` removes rows with any null. `"values"` removes rows
- *   only when the feature values contain nulls. `false` keeps all rows. Default is `"all"`.
+ *   removeMissingValues: `"all"` removes rows with any null (default),
+ *   `"values"` removes rows only when feature values contain nulls,
+ *   `false` keeps all rows.
  * @returns {import("./utils.js").MistleDataset & {
  *     sex: string[];
  *     year: number[];
@@ -15,8 +15,18 @@ import PENGUINS_RAW from "../dataset/penguins.json" with { type: "json" };
  * }} The final penguins dataset.
  */
 export default function penguins({ removeMissingValues = "all" } = {}) {
-    let { values, columns, labels, sex, year, island, statistics } =
-        PENGUINS_RAW;
+    const { columns } = PENGUINS_RAW;
+    /** @type {number[][]} */
+    let values = /** @type {any} */ (PENGUINS_RAW.values);
+    /** @type {string[]} */
+    let labels = /** @type {any} */ (PENGUINS_RAW.labels);
+    /** @type {string[]} */
+    let sex = /** @type {any} */ (PENGUINS_RAW.sex);
+    /** @type {number[]} */
+    let year = /** @type {any} */ (PENGUINS_RAW.year);
+    /** @type {string[]} */
+    let island = /** @type {any} */ (PENGUINS_RAW.island);
+
     if (removeMissingValues == "all" || removeMissingValues == "values") {
         const N = values.length;
         let valid_indices = [];
@@ -59,6 +69,12 @@ export default function penguins({ removeMissingValues = "all" } = {}) {
     };
 }
 
+/**
+ * @template T
+ * @param {T[]} values
+ * @param {number[]} indices
+ * @returns {T[]}
+ */
 function filter(values, indices) {
     return indices.map((i) => values[i]);
 }

@@ -14,7 +14,8 @@ const openml_file_api = "https://www.openml.org/data/v1/get_csv/";
  * @returns {Promise<{raw_data: string, description: object}>} Raw data as string, and the dataset description provided by openml.org.
  */
 export default async function fetch_openml(id, api_key) {
-    let fetch = await get_fetch();
+    const fetch = await get_fetch();
+    if (!fetch) throw new Error("fetch is not available. Use Node.js 18+ or provide a global fetch polyfill.");
 
     let url = encodeURI(`${openml_main_api}data/${id}`);
     if (api_key) {

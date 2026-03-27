@@ -25,6 +25,7 @@ export default function swissroll({
     num_labels = 8,
 } = {}) {
     const R = new Randomizer(seed);
+    /** @type {number[][]} */
     let values = new Array(N);
     const labels = new Array(N);
     const columns = ["X", "Y", "Z"];

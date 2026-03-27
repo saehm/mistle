@@ -179,11 +179,8 @@ type MistleDataset = {
  * Downloads and samples the MNIST dataset.
  *
  * @param {{N?: number, seed?: number, digits?: number[], api_key?: string}} [parameters={}]
- * @param {number} [parameters.N=400] - Number of points. Default is `400`
- * @param {number} [parameters.seed=4711] - Seed for the random number generator. Default is `4711`
- * @param {number[]} [parameters.digits=[0,1,2,3,4,5,6,7,8,9]] - Filter for which digits
- *   end up in the final dataset. Default is `[0,1,2,3,4,5,6,7,8,9]`
- * @param {string} [parameters.api_key] - API key for OpenML.
+ *   N: number of points (default 400), seed: RNG seed (default 4711),
+ *   digits: which digits to include (default 0-9), api_key: OpenML API key.
  * @returns {Promise<import("./utils.js").MistleDataset & {description: object}>} The final MNIST dataset sample.
  */
 declare function _default$2({ N, seed, digits, api_key, }?: {
@@ -199,11 +196,8 @@ declare function _default$2({ N, seed, digits, api_key, }?: {
  * Downloads and samples the FMNIST dataset.
  *
  * @param {{N?: number, seed?: number, items?: number[], api_key?: string}} [parameters={}]
- * @param {number} [parameters.N=400] - Number of points. Default is `400`
- * @param {number} [parameters.seed=4711] - Seed for the random number generator. Default is `4711`
- * @param {number[]} [parameters.items=[0,1,2,3,4,5,6,7,8,9]] - Filter for which items
- *   end up in the final dataset. Default is `[0,1,2,3,4,5,6,7,8,9]`
- * @param {string} [parameters.api_key] - API key for OpenML.
+ *   N: number of points (default 400), seed: RNG seed (default 4711),
+ *   items: which item classes to include (default 0-9), api_key: OpenML API key.
  * @returns {Promise<import("./utils.js").MistleDataset & {description: object}>} The final FMNIST dataset sample.
  */
 declare function _default$1({ N, seed, items, api_key, }?: {
@@ -219,11 +213,8 @@ declare function _default$1({ N, seed, items, api_key, }?: {
  * Downloads and samples the Kuzushiji-MNIST dataset.
  *
  * @param {{N?: number, seed?: number, letters?: number[], api_key?: string}} [parameters={}]
- * @param {number} [parameters.N=400] - Number of points. Default is `400`
- * @param {number} [parameters.seed=4711] - Seed for the random number generator. Default is `4711`
- * @param {number[]} [parameters.letters=[0,1,2,3,4,5,6,7,8,9]] - Filter for which letters
- *   end up in the final dataset. Default is `[0,1,2,3,4,5,6,7,8,9]`
- * @param {string} [parameters.api_key] - API key for OpenML.
+ *   N: number of points (default 400), seed: RNG seed (default 4711),
+ *   letters: which kana classes to include (default 0-9), api_key: OpenML API key.
  * @returns {Promise<import("./utils.js").MistleDataset & {description: object}>} The final Kuzushiji-MNIST dataset sample.
  * @see {@link https://arxiv.org/abs/1812.01718}
  */
@@ -1093,9 +1084,9 @@ declare const BLOBS: MistleDataset;
  * Returns the Palmers Penguins dataset.
  *
  * @param {{removeMissingValues?: false | "all" | "values"}} [parameters={}]
- * @param {false | "all" | "values"} [parameters.removeMissingValues="all"] - Remove
- *   missing values. `"all"` removes rows with any null. `"values"` removes rows
- *   only when the feature values contain nulls. `false` keeps all rows. Default is `"all"`.
+ *   removeMissingValues: `"all"` removes rows with any null (default),
+ *   `"values"` removes rows only when feature values contain nulls,
+ *   `false` keeps all rows.
  * @returns {import("./utils.js").MistleDataset & {
  *     sex: string[];
  *     year: number[];
