@@ -47,11 +47,12 @@ function scaleLinear([min, max], [from, to]) {
 }
 
 /**
- * @param {Iterable<T>} array
+ * @template T
+ * @param {T[]} array
  * @param {(d: T) => number} acc
  * @returns {[number, number]}
  */
-function extent(array, acc = (d) => d) {
+function extent(array, acc = (/** @type {any} */ d) => /** @type {number} */ (d)) {
     let min = Infinity;
     let max = -Infinity;
     for (const entry of array) {
@@ -62,11 +63,12 @@ function extent(array, acc = (d) => d) {
 }
 
 /**
- * @param {Iterable<T>} array
+ * @template T
+ * @param {T[]} array
  * @param {(d: T) => number} acc
  * @returns {[number, number]}
  */
-function deviation(array, acc = (d) => d) {
+function deviation(array, acc = (/** @type {any} */ d) => /** @type {number} */ (d)) {
     const N = array.length;
     let mean = 0;
     for (const entry of array) {
@@ -75,9 +77,9 @@ function deviation(array, acc = (d) => d) {
     mean /= N;
     let dev = 0;
     for (const entry of array) {
-        dev += acc(entry) - mean;
+        dev += (acc(entry) - mean) ** 2;
     }
-    return [mean, dev / N];
+    return [mean, Math.sqrt(dev / N)];
 }
 
 /**
@@ -89,6 +91,14 @@ function deviation(array, acc = (d) => d) {
  */
 
 /**
+ * @typedef MistleDataset
+ * @property {number[][]} values - Array of feature vectors.
+ * @property {(string | number)[]} labels - Class or group label for each row.
+ * @property {string[]} columns - Feature names.
+ * @property {() => Record<string, Statistics>} statistics - Lazily computed per-column statistics.
+ */
+
+/**
  * @param {object} mistle_data
  * @param {number[][]} mistle_data.values
  * @param {string[]} mistle_data.columns
@@ -96,10 +106,10 @@ function deviation(array, acc = (d) => d) {
  */
 function getStatistics({ values, columns }) {
     return function () {
-        let result = {};
+        /** @type {Record<string, Statistics>} */
+        const result = {};
         columns.forEach((dimension, i) => {
-            /** @type {Record<string, Statistics>} */
-            result[dimension] = {};
+            result[dimension] = /** @type {Statistics} */ ({});
             const [mean, std] = deviation(values, (row) => row[i]);
             result[dimension].std = std;
             result[dimension].mean = mean;
@@ -111,18 +121,13 @@ function getStatistics({ values, columns }) {
     };
 }
 
-async function get_fetch() {
-    let fetch;
-    try {
-        if (
-            process &&
-            typeof process !== undefined &&
-            process.release.name === "node"
-        ) {
-            fetch = (await import('cross-fetch')).fetch;
-        }
-    } catch {
-        fetch = window.fetch;
+/**
+ * Returns the global fetch function. Requires Node.js 18+ or a browser environment.
+ * @returns {typeof globalThis.fetch}
+ */
+function get_fetch() {
+    if (typeof fetch === "undefined") {
+        throw new Error("fetch is not available. Node.js 18+ or a browser with fetch support is required.");
     }
     return fetch;
 }
@@ -188,24 +193,13 @@ function randomNormal(R, mu = 0, sigma = 1) {
  * {@link freq_x}) * cos(y * {@link freq_y}) * {@link amplitude}.
  *
  * @param {Object} parameters
- * @param {Number} [parameters.N=400] - Number of points. Default is `400`
- * @param {number} [parameters.freq_x=1] - Multiplicator for sin in the
- *   x-direction. Default is `1`
- * @param {Float} [parameters.freq_y=1] - Multiplicator for cos in the
- *   y-direction. Default is `1`
- * @param {Float} [parameters.amplitude=2] - Amplitutde for z-direction. Default
- *   is `2`
- * @param {Float} [parameters.noise=0] - Add uniform noise to each point at each
- *   direction. Default is `0`
- * @param {Number} [parameters.seed=4711] - Seed for the random number
- *   generator. Default is `4711`
- * @returns {{
- *     values: Array[];
- *     labels: String[];
- *     columns: String[];
- *     statistics: Object;
- * }}
- *   - The final waves dataset.
+ * @param {number} [parameters.N=400] - Number of points. Default is `400`
+ * @param {number} [parameters.freq_x=1] - Multiplicator for sin in the x-direction. Default is `1`
+ * @param {number} [parameters.freq_y=1] - Multiplicator for cos in the y-direction. Default is `1`
+ * @param {number} [parameters.amplitude=2] - Amplitude for z-direction. Default is `2`
+ * @param {number} [parameters.noise=0] - Add uniform noise to each point at each direction. Default is `0`
+ * @param {number} [parameters.seed=4711] - Seed for the random number generator. Default is `4711`
+ * @returns {import("./utils.js").MistleDataset} The final waves dataset.
  */
 function waves({
     N = 400,
@@ -247,23 +241,15 @@ const WAVES = waves();
  * Creates a swissroll.
  *
  * @param {Object} parameters
- * @param {Number} parameters.N - Number of points.
- * @param {Float} parameters.alpha_start - Angle from which the swissroll
- *   starts.
- * @param {Float} parameters.alpha_end - Angle at which the swissroll ends.
- * @param {Float} parameters.noise - Add uniform noise to each point at each
- *   direction.
- * @param {Float} parameters.width - Width of the swissroll.
- * @param {Number} parameters.seed - Seed for the random number generator.
- * @param {Number} parameters.num_labels - Number of labels for the swissroll,
+ * @param {number} [parameters.N=400] - Number of points.
+ * @param {number} [parameters.alpha_start=1] - Angle from which the swissroll starts.
+ * @param {number} [parameters.alpha_end=2.5] - Angle at which the swissroll ends.
+ * @param {number} [parameters.noise=0] - Add uniform noise to each point at each direction.
+ * @param {number} [parameters.width=20] - Width of the swissroll.
+ * @param {number} [parameters.seed=4711] - Seed for the random number generator.
+ * @param {number} [parameters.num_labels=8] - Number of labels for the swissroll,
  *   partitions the swissroll in num_labels parts according to the angle.
- * @returns {{
- *     values: Array[];
- *     labels: String[];
- *     columns: String[];
- *     statistics: Object;
- * }}
- *   - The final swissroll dataset.
+ * @returns {import("./utils.js").MistleDataset} The final swissroll dataset.
  */
 function swissroll({
     N = 400,
@@ -275,6 +261,7 @@ function swissroll({
     num_labels = 8,
 } = {}) {
     const R = new druidjs.Randomizer(seed);
+    /** @type {number[][]} */
     let values = new Array(N);
     const labels = new Array(N);
     const columns = ["X", "Y", "Z"];
@@ -306,20 +293,13 @@ const SWISSROLL = swissroll();
  * Creates a s-shape.
  *
  * @param {Object} parameters
- * @param {Number} parameters.N - Number of points.
- * @param {Float} parameters.noise - Add uniform noise to each point at each
- *   direction.
- * @param {Float} parameters.width - Width of the s-shape.
- * @param {Number} parameters.seed - Seed for the random number generator.
- * @param {Number} parameters.num_labels - Number of labels for the s-shape,
+ * @param {number} [parameters.N=400] - Number of points.
+ * @param {number} [parameters.noise=0] - Add uniform noise to each point at each direction.
+ * @param {number} [parameters.width=20] - Width of the s-shape.
+ * @param {number} [parameters.seed=4711] - Seed for the random number generator.
+ * @param {number} [parameters.num_labels=8] - Number of labels for the s-shape,
  *   partitions the s-shape in num_labels parts according to the angle.
- * @returns {{
- *     values: Array[];
- *     labels: String[];
- *     columns: String[];
- *     statistics: Object;
- * }}
- *   - The final s-shape dataset.
+ * @returns {import("./utils.js").MistleDataset} The final s-shape dataset.
  */
 function sshape({
     N = 400,
@@ -329,6 +309,7 @@ function sshape({
     num_labels = 8,
 } = {}) {
     const R = new druidjs.Randomizer(seed);
+    /** @type {number[][]} */
     let values = new Array(N);
     const labels = new Array(N);
     const columns = ["X", "Y", "Z"];
@@ -360,24 +341,13 @@ const SSHAPE = sshape();
  * Creates a rays dataset consisting of {@link parameters.D} rays.
  *
  * @param {Object} parameters
- * @param {Number} [parameters.N=400] - Roughly the number of points, uses
- *   round(N / D) * D. Default is `400`
- * @param {Number} [parameters.D=7] - Number of rays, and number of the results
- *   dimensionality. Creates a ray per direction. Default is `7`
- * @param {Float} [parameters.noise=0] - Add uniform noise to each point at each
- *   direction. Default is `0`
- * @param {Boolean} [parameters.touching=false] - Defines if the rays touches
- *   each other at the origin. Default is `false`
- * @param {Float} [paramter.length=12] - Length of each ray. Default is `12`
- * @param {Number} [parameters.seed=4711] - Seed for the random number
- *   generator. Default is `4711`
- * @returns {{
- *     values: Array[];
- *     labels: String[];
- *     columns: String[];
- *     statistics: Object;
- * }}
- *   - The final rays dataset.
+ * @param {number} [parameters.N=400] - Roughly the number of points, uses round(N / D) * D. Default is `400`
+ * @param {number} [parameters.D=7] - Number of rays and dimensionality of the result. Default is `7`
+ * @param {number} [parameters.noise=0] - Add uniform noise to each point at each direction. Default is `0`
+ * @param {boolean} [parameters.touching=true] - Whether the rays touch each other at the origin. Default is `true`
+ * @param {number} [parameters.length=12] - Length of each ray. Default is `12`
+ * @param {number} [parameters.seed=4711] - Seed for the random number generator. Default is `4711`
+ * @returns {import("./utils.js").MistleDataset} The final rays dataset.
  */
 function rays({
     N = 400,
@@ -422,20 +392,12 @@ const RAYS = rays();
  * Creates a 'moons' dataset consisting of two intersecting circles.
  *
  * @param {Object} parameters
- * @param {Number} parameters.N - Number of points.
- * @param {Float} parameters.noise - Add uniform noise to each point at each
- *   direction.
- * @param {Float} parameters.open - How open the circles should be. Takes a
- *   value in [0 and 1), where 0 creates two full circles, 0.5 create two half
- *   circles.
- * @param {Number} parameters.seed - Seed for the random number generator.
- * @returns {{
- *     values: Array[];
- *     labels: String[];
- *     columns: String[];
- *     statistics: Object;
- * }}
- *   - The final moons dataset.
+ * @param {number} [parameters.N=400] - Number of points.
+ * @param {number} [parameters.noise=0] - Add uniform noise to each point at each direction.
+ * @param {number} [parameters.open=0.5] - How open the circles should be. Takes a value in
+ *   [0, 1), where 0 creates two full circles, 0.5 creates two half circles.
+ * @param {number} [parameters.seed=4711] - Seed for the random number generator.
+ * @returns {import("./utils.js").MistleDataset} The final moons dataset.
  */
 function moons({
     N = 400,
@@ -448,6 +410,7 @@ function moons({
     const N_beta = N - N_alpha;
 
     const scale = scaleLinear([0, 1], [open / 2, 1 - open / 2]);
+    /** @type {number[][]} */
     let values = new Array(N);
     const labels = new Array(N);
     const columns = ["moon_X", "moon_Y", "moon_Z"];
@@ -499,13 +462,7 @@ const MOONS = moons();
  *   deviations for all blobs for all directions. Default is `1`
  * @param {number} [parameters.seed=4711] - Seed for the random number
  *   generator. Default is `4711`
- * @returns {{
- *     values: number[][];
- *     labels: string[];
- *     columns: string[];
- *     statistics: () => Record<string, import("./utils.js").Statistics>;
- * }}
- *   - The final blobs dataset.
+ * @returns {import("./utils.js").MistleDataset} The final blobs dataset.
  */
 function blobs({
     N = 400,
@@ -530,7 +487,7 @@ function blobs({
     }
 
     if (!Array.isArray(centers)) {
-        throw "Centers needs to be an array, an integer, or null (defaults to centers = 3)!";
+        throw new Error("Centers needs to be an array, an integer, or null (defaults to centers = 3)!");
     }
 
     if (!deviations) {
@@ -542,7 +499,7 @@ function blobs({
             );
         }
         if (Array.isArray(deviations) && deviations.length != centers.length) {
-            throw "If deviations is given, then its value needs to be a number or an array of the same length as centers! (defaults to deviations = 1)";
+            throw new Error("If deviations is given, then its value needs to be a number or an array of the same length as centers! (defaults to deviations = 1)");
         }
     }
 
@@ -580,26 +537,29 @@ var values=[[39.1,18.7,181,3750],[39.5,17.4,186,3800],[40.3,18,195,3250],[null,n
 /**
  * Returns the Palmers Penguins dataset.
  *
- * @param {Object} parameters
- * @param {false | "all" | "values"} [removeMissingValues="all"] - Remove
- *   missing values, if "all" then remove all rows if a null is in any column.
- *   If "values", then remove rows only if only the respective row in values
- *   contains a null. If false, then no missing value gets removed. Default is
- *   `"all"`
- * @returns {{
- *     values: Array[];
- *     labels: String[];
- *     columns: String[];
- *     sex: String[];
- *     year: Number[];
- *     island: String[];
- *     statistics: Object;
- * }}
- *   - The final penguins dataset.
+ * @param {{removeMissingValues?: false | "all" | "values"}} [parameters={}]
+ *   removeMissingValues: `"all"` removes rows with any null (default),
+ *   `"values"` removes rows only when feature values contain nulls,
+ *   `false` keeps all rows.
+ * @returns {import("./utils.js").MistleDataset & {
+ *     sex: string[];
+ *     year: number[];
+ *     island: string[];
+ * }} The final penguins dataset.
  */
 function penguins({ removeMissingValues = "all" } = {}) {
-    let { values, columns, labels, sex, year, island} =
-        PENGUINS_RAW;
+    const { columns } = PENGUINS_RAW;
+    /** @type {number[][]} */
+    let values = /** @type {any} */ (PENGUINS_RAW.values);
+    /** @type {string[]} */
+    let labels = /** @type {any} */ (PENGUINS_RAW.labels);
+    /** @type {string[]} */
+    let sex = /** @type {any} */ (PENGUINS_RAW.sex);
+    /** @type {number[]} */
+    let year = /** @type {any} */ (PENGUINS_RAW.year);
+    /** @type {string[]} */
+    let island = /** @type {any} */ (PENGUINS_RAW.island);
+
     if (removeMissingValues == "all" || removeMissingValues == "values") {
         const N = values.length;
         let valid_indices = [];
@@ -638,10 +598,16 @@ function penguins({ removeMissingValues = "all" } = {}) {
         sex,
         year,
         island,
-        statistics: getStatistics(values),
+        statistics: getStatistics({ values, columns }),
     };
 }
 
+/**
+ * @template T
+ * @param {T[]} values
+ * @param {number[]} indices
+ * @returns {T[]}
+ */
 function filter(values, indices) {
     return indices.map((i) => values[i]);
 }
@@ -652,12 +618,13 @@ function wine({ normalize = false } = {}) {
     if (normalize === false) {
         return WINE_RAW;
     } else {
+        const stats = /** @type {Record<string, {min: number, max: number}>} */ (WINE_RAW.statistics);
         const values = WINE_RAW.values.map((row) => {
             return row.map(
                 (v, i) =>
-                    (v - WINE_RAW.statistics[WINE_RAW.columns[i]].min) /
-                    (WINE_RAW.statistics[WINE_RAW.columns[i]].max -
-                        WINE_RAW.statistics[WINE_RAW.columns[i]].min),
+                    (v - stats[WINE_RAW.columns[i]].min) /
+                    (stats[WINE_RAW.columns[i]].max -
+                        stats[WINE_RAW.columns[i]].min),
             );
         });
         return { ...WINE_RAW, values };
@@ -674,13 +641,12 @@ const openml_file_api = "https://www.openml.org/data/v1/get_csv/";
 /**
  * Fetches data from openml.org
  *
- * @param {Number} id - Data ID from openml.org
- * @param {String} api_key - Your api-key
- * @returns {Object} - Raw data as string, and the dataset description provided
- *   by openml.org.
+ * @param {number} id - Data ID from openml.org
+ * @param {string} [api_key] - Your api-key
+ * @returns {Promise<{raw_data: string, description: object}>} Raw data as string, and the dataset description provided by openml.org.
  */
 async function fetch_openml(id, api_key) {
-    let fetch = await get_fetch();
+    const fetch = get_fetch();
 
     let url = encodeURI(`${openml_main_api}data/${id}`);
     if (api_key) {
@@ -692,7 +658,7 @@ async function fetch_openml(id, api_key) {
     if (!main_response.ok) {
         throw Error(`${main_response.status} ${main_response.statusText}`);
     }
-    const description = await main_response.json();
+    const description = /** @type {{data_set_description: {file_id: string}}} */ (await main_response.json());
 
     // fetching the file.
     const file_response = await fetch(
@@ -703,26 +669,16 @@ async function fetch_openml(id, api_key) {
     }
     const raw_data = await file_response.text();
 
-    return { raw_data, description: {} };
+    return { raw_data, description: description.data_set_description };
 }
 
 /**
  * Downloads and samples the MNIST dataset.
  *
- * @param {Object} parameters
- * @param {Number} [N=400] - Number of points. Default is `400`
- * @param {Number} [seed=4711] - Seed for the random number generator. Default
- *   is `4711`
- * @param {Number[]} [digits=[0,1,2,3,4,5,6,7,8,9]] - Filter for which digits
- *   end up in the final dataset. Default is `[0,1,2,3,4,5,6,7,8,9]`
- * @param {String} [api_key=null] - API key for OpenML. Default is `null`
- * @returns {{
- *     values: Array[];
- *     labels: String[];
- *     columns: String[];
- *     statistics: Object;
- * }}
- *   - The final MNIST dataset sample.
+ * @param {{N?: number, seed?: number, digits?: number[], api_key?: string}} [parameters={}]
+ *   N: number of points (default 400), seed: RNG seed (default 4711),
+ *   digits: which digits to include (default 0-9), api_key: OpenML API key.
+ * @returns {Promise<import("./utils.js").MistleDataset & {description: object}>} The final MNIST dataset sample.
  */
 async function mnist ({
     N = 400,
@@ -743,7 +699,7 @@ async function mnist ({
 
     const indices = all_labels.map((_, i) => i);
     const filtered_indices = digits.map((digit) =>
-        indices.filter((i) => all_labels[i] == digit),
+        indices.filter((i) => all_labels[i] === String(digit)),
     );
     const selected_indices = number_digits
         .map((n, i) => R.choice(filtered_indices[i], n))
@@ -783,20 +739,10 @@ const FMNIST_LABELS_DICT = {
 /**
  * Downloads and samples the FMNIST dataset.
  *
- * @param {Object} parameters
- * @param {Number} [N=400] - Number of points. Default is `400`
- * @param {Number} [seed=4711] - Seed for the random number generator. Default
- *   is `4711`
- * @param {Number[]} [items=[0,1,2,3,4,5,6,7,8,9]] - Filter for which items end
- *   up in the final dataset. Default is `[0,1,2,3,4,5,6,7,8,9]`
- * @param {String} [api_key=null] - API key for OpenML. Default is `null`
- * @returns {{
- *     values: Array[];
- *     labels: String[];
- *     columns: String[];
- *     statistics: Object;
- * }}
- *   - The final FMNIST dataset sample.
+ * @param {{N?: number, seed?: number, items?: number[], api_key?: string}} [parameters={}]
+ *   N: number of points (default 400), seed: RNG seed (default 4711),
+ *   items: which item classes to include (default 0-9), api_key: OpenML API key.
+ * @returns {Promise<import("./utils.js").MistleDataset & {description: object}>} The final FMNIST dataset sample.
  */
 async function fmnist ({
     N = 400,
@@ -817,7 +763,7 @@ async function fmnist ({
 
     const indices = all_labels.map((_, i) => i);
     const filtered_indices = items.map((digit) =>
-        indices.filter((i) => all_labels[i] == digit),
+        indices.filter((i) => all_labels[i] === String(digit)),
     );
     const selected_indices = number_digits
         .map((n, i) => R.choice(filtered_indices[i], n))
@@ -826,7 +772,7 @@ async function fmnist ({
     const labels = [];
     for (const i of selected_indices) {
         values.push(all_values[i]);
-        labels.push(FMNIST_LABELS_DICT[all_labels[i]]);
+        labels.push(FMNIST_LABELS_DICT[/** @type {keyof typeof FMNIST_LABELS_DICT} */ (+all_labels[i])]);
     }
     const columns = Array.from(
         { length: 28 * 28 },
@@ -857,22 +803,11 @@ const KMNIST_LABELS_DICT = {
 /**
  * Downloads and samples the Kuzushiji-MNIST dataset.
  *
- * @param {Object} parameters
- * @param {Number} [N=400] - Number of points. Default is `400`
- * @param {Number} [seed=4711] - Seed for the random number generator. Default
- *   is `4711`
- * @param {Number[]} [items=[0,1,2,3,4,5,6,7,8,9]] - Filter for which items end
- *   up in the final dataset. Default is `[0,1,2,3,4,5,6,7,8,9]`
- * @param {String} [api_key=null] - API key for OpenML. Default is `null`
- * @returns {{
- *     values: Array[];
- *     labels: String[];
- *     columns: String[];
- *     statistics: Object;
- * }}
- *   - The final Kuzushiji-MNIST dataset sample.
- *
- * @see {@link{https://arxiv.org/abs/1812.01718}}
+ * @param {{N?: number, seed?: number, letters?: number[], api_key?: string}} [parameters={}]
+ *   N: number of points (default 400), seed: RNG seed (default 4711),
+ *   letters: which kana classes to include (default 0-9), api_key: OpenML API key.
+ * @returns {Promise<import("./utils.js").MistleDataset & {description: object}>} The final Kuzushiji-MNIST dataset sample.
+ * @see {@link https://arxiv.org/abs/1812.01718}
  */
 async function kmnist ({
     N = 400,
@@ -893,7 +828,7 @@ async function kmnist ({
 
     const indices = all_labels.map((_, i) => i);
     const filtered_indices = letters.map((digit) =>
-        indices.filter((i) => all_labels[i] == digit),
+        indices.filter((i) => all_labels[i] === String(digit)),
     );
     const selected_indices = number_digits
         .map((n, i) => R.choice(filtered_indices[i], n))
@@ -902,7 +837,7 @@ async function kmnist ({
     const labels = [];
     for (const i of selected_indices) {
         values.push(all_values[i]);
-        labels.push(KMNIST_LABELS_DICT[all_labels[i]]);
+        labels.push(KMNIST_LABELS_DICT[/** @type {keyof typeof KMNIST_LABELS_DICT} */ (+all_labels[i])]);
     }
     const columns = Array.from(
         { length: 28 * 28 },
@@ -917,7 +852,7 @@ async function kmnist ({
     };
 }
 
-var version$1="0.2.4";var meta = {version:version$1};
+var version$1="0.3.0";var meta = {version:version$1};
 
 const version = meta.version;
 

@@ -41,7 +41,7 @@
     },
     "scripts": {
         "clean:dts": "node -e \"const fs=require('fs'),p=require('path');fs.readdirSync('dist').filter(f=>f.endsWith('.d.ts')&&f!=='mistle.d.ts').forEach(f=>fs.rmSync(p.join('dist',f)))\"",
-        "build": "tsc && rollup -c && npm run clean:dts",
+        "build": "tsc && rollup -c && pnpm run clean:dts",
         "dev": "rollup -cw",
         "test": "tape test/test.js"
     },
